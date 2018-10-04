@@ -1,10 +1,10 @@
 <html>
     <title>سامانه استادجو</title>
     <body>
-    <nav>
-        <a>خانه</a>
-        <a>ورود</a>
-        <a>ثبت نام</a>
+    <nav id="navbar">
+        <a id="navbar_home" href="{% url 'home' %}">خانه</a>
+        <a id="navbar_login">ورود</a>
+        <a id="navbar_signup">ثبت نام</a>
     </nav>
     {% block content %}
     {% endblock %}
