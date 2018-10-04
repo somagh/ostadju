@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>ورود</h2>
+<form method="post">
+    {% csrf_token %}
+    <div>{{form.username}} :نام کاربری</div>
+    <div>{{form.password}} :رمز عبور</div>
+    <button type="submit">ورود</button>
+</form>
+{% endblock content %}
