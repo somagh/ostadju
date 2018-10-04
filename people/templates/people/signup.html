@@ -3,12 +3,13 @@
 <h2>ثبت نام</h2>
 <form method="post">
     {% csrf_token %}
+    {{form.errors}}
     <div>{{form.first_name}} :نام</div>
     <div>{{form.last_name}} :نام خانوادگی</div>
     <div>{{form.username}} :نام کاربری</div>
     <div>{{form.email}} :ایمیل</div>
     <div>{{form.password1}} :رمز عبور</div>
     <div>{{form.password2}} :تکرار رمز عبور</div>
-    <button type="submit">ثبت نام</button>
+    <button id="signup_submit" type="submit">ثبت نام</button>
 </form>
 {% endblock content %}
