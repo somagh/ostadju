@@ -2,11 +2,11 @@
 <title>استادجو</title>
 
 <body>
-    <div>
-        <a href={% url 'home' %}>خانه</a>
-        <a>ورود</a>
-        <a href="{% url 'people:signup' %}">ثبت نام</a>
-    </div>
+    <nav id="navbar">
+        <a id="navbar_home" href="{% url 'home' %}">خانه</a>
+        <a id="navbar_login">ورود</a>
+        <a id="navbar_signup" href="{% url 'people:signup' %}">ثبت نام</a>
+    </nav>
     {% block content %}
 
     {% endblock %}
