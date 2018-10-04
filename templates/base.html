@@ -1,12 +1,15 @@
 <html>
-    <title>سامانه استادجو</title>
-    <body>
-    <nav>
-        <a>خانه</a>
+<title>استادجو</title>
+
+<body>
+    <div>
+        <a href={% url 'home' %}>خانه</a>
         <a>ورود</a>
-        <a>ثبت نام</a>
-    </nav>
+        <a href="{% url 'people:signup' %}">ثبت نام</a>
+    </div>
     {% block content %}
+
     {% endblock %}
-    </body>
+</body>
+
 </html>
