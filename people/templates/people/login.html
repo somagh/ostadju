@@ -3,8 +3,11 @@
 <h2>ورود</h2>
 <form method="post">
     {% csrf_token %}
+    {% if form.errors %}
+نام کاربری یا گذرواژه غلط است.
+    {% endif %}
     <div>{{form.username}} :نام کاربری</div>
-    <div>{{form.password}} :رمز عبور</div>
+    <div>{{form.password}} :گذرواژه</div>
     <button type="submit" id="login_submit">ورود</button>
 </form>
 {% endblock content %}

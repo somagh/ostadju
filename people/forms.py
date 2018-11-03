@@ -13,7 +13,7 @@ class SignUpForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.error_messages['password_mismatch'] = "رمزعبور و تکرار رمز عبور یکسان نیستند."
+        self.error_messages['password_mismatch'] = "گذرواژه و تکرار گذرواژه یکسان نیستند."
 
     class Meta:
         model = User
