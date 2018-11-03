@@ -10,6 +10,7 @@
         <a id="navbar_login" href="{% url 'people:login' %}">ورود</a>
         <a id="navbar_signup" href="{% url 'people:signup' %}">ثبت نام</a>
         {% endif %}
+        <a id="navbar_contact_us" href="{% url 'people:contact_us' %}">تماس با ما</a>
     </nav>
     {% block content %}
     {% endblock %}
