@@ -13,14 +13,14 @@ class SignUpForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.error_messages['password_mismatch'] = "رمزعبور و تکرار رمز عبور یکسان نیستند."
+        self.error_messages['password_mismatch'] = "گذرواژه و تکرار گذرواژه یکسان نیستند."
 
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name',
-                  'email', 'password1', 'password2', )
+                  'email', 'password1', 'password2',)
         error_messages = {
-            'username':{
+            'username': {
                 'unique': "کاربری با نام کاربری وارد شده وجود دارد."
             }
         }
@@ -31,3 +31,9 @@ class SignUpForm(UserCreationForm):
         if email and User.objects.filter(email=email).exclude(username=username).exists():
             raise forms.ValidationError(u'کاربری با ایمیل وارد شده وجود دارد.')
         return email
+
+
+class ContactUsForm(forms.Form):
+    title = forms.CharField(max_length=40, label='عنوان')
+    email = forms.EmailField(label='ایمیل', required=False)
+    text = forms.CharField(label='متن', widget=forms.Textarea, min_length=10, max_length=250)
