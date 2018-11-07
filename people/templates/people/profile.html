@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>پروفایل</h2>
+
+    <p>نام:
+        {{user.first_name}}</p>
+    <p> نام خانوادگی:
+        {{user.last_name}}</p>
+    <p>یوزر:
+        {{user.username}}</p>
+
+{% endblock content %}

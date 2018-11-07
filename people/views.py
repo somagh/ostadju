@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+
 from people.forms import SignUpForm, ContactUsForm
 
 
@@ -15,11 +17,17 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'people/signup.html', {'form': form})
 
-def contactUs(request):
+
+def contact_us(request):
     if request.method == 'POST':
         form = ContactUsForm(request.POST)
         if form.is_valid():
             return render(request, 'people/contact_us_success.html')
     else:
-        form=ContactUsForm()
+        form = ContactUsForm()
     return render(request, 'people/contact_us.html', {'form': form})
+
+
+@login_required
+def profile(request):
+    return render(request, 'people/profile.html', {'user': request.user})
