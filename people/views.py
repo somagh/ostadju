@@ -23,7 +23,7 @@ def contact_us(request):
     if request.method == 'POST':
         form = ContactUsForm(request.POST)
         if form.is_valid():
-            send_mail(form.cleaned_data['title'], form.cleaned_data['text'], from_email=form.cleaned_data['email'], recipient_list=["aryakowsary@yahoo.com"],
+            send_mail(form.cleaned_data['title'],"فرم تماس با ما با اطلاعات زیر پر شده است\n ایمیل:‌{} \n متن:{}".format(form.cleaned_data['email'],form.cleaned_data['text']), from_email=form.cleaned_data['email'], recipient_list=["ostadju@fastmail.com"],
                       fail_silently=True)
             return render(request, 'people/contact_us_success.html')
     else:
