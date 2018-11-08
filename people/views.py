@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 
 from people.forms import SignUpForm, ContactUsForm, EditProfileForm
@@ -22,6 +23,8 @@ def contact_us(request):
     if request.method == 'POST':
         form = ContactUsForm(request.POST)
         if form.is_valid():
+            send_mail(form.cleaned_data['title'], form.cleaned_data['text'], from_email=form.cleaned_data['email'], recipient_list=["aryakowsary@yahoo.com"],
+                      fail_silently=True)
             return render(request, 'people/contact_us_success.html')
     else:
         form = ContactUsForm()
