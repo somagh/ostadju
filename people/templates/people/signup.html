@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>ثبت نام</h2>
-<form method="post">
-    {% csrf_token %}
-    {{form.errors}}
-    <div>{{form.first_name}} :نام</div>
-    <div>{{form.last_name}} :نام خانوادگی</div>
-    <div>{{form.username}} :نام کاربری</div>
-    <div>{{form.email}} :ایمیل</div>
-    <div>{{form.password1}} :گذرواژه</div>
-    <div>{{form.password2}} :تکرار گذرواژه</div>
-    <button id="signup_submit" type="submit">ثبت نام</button>
-</form>
+    <h2>ثبت نام</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.errors }}
+        {% for element in form %}
+            <p>
+                {{ element.label }}:
+                {{ element }}
+            </p>
+
+        {% endfor %}
+        <button id="signup_submit" type="submit">ثبت نام</button>
+    </form>
 {% endblock content %}
