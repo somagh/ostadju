@@ -1,4 +1,6 @@
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 
 from people.decorators import is_student_check
@@ -23,6 +25,11 @@ def contact_us(request):
     if request.method == 'POST':
         form = ContactUsForm(request.POST)
         if form.is_valid():
+            send_mail(form.cleaned_data['title'],
+                      "فرم تماس با ما با اطلاعات زیر پر شده است\n ایمیل:‌{} \n متن:{}".format(
+                          form.cleaned_data['email'], form.cleaned_data['text']), from_email=form.cleaned_data['email'],
+                      recipient_list=["ostadju@fastmail.com"],
+                      fail_silently=True)
             return render(request, 'people/contact_us_success.html')
     else:
         form = ContactUsForm()
