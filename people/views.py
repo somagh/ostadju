@@ -1,7 +1,8 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect
 
-from people.forms import SignUpForm, ContactUsForm, EditProfileForm
+from people.decorators import is_student_check
+from people.forms import SignUpForm, ContactUsForm, EditProfileStudentForm, EditProfileUserForm
 
 
 # Create your views here.
@@ -34,23 +35,24 @@ def profile(request):
 
 
 @login_required
+@user_passes_test(test_func=is_student_check)
 def edit_profile(request):
     if request.method == 'POST':
-        form = EditProfileForm(request.POST)
-        if form.is_valid():
-            user = request.user
-            first_name = form.cleaned_data["first_name"]
-            last_name = form.cleaned_data["last_name"]
-            form = EditProfileForm()
-            if first_name:
-                user.first_name = first_name
-            if last_name:
-                user.last_name = last_name
-            user.save()
+
+        form1 = EditProfileUserForm(instance=request.user, data=request.POST)
+        form2 = EditProfileStudentForm(instance=request.user.student, data=request.POST)
+
+        if form1.is_valid() and form2.is_valid():
+            form1.save()
+            form2.save()
             message = 'درخواست شما با موفقیت انجام شد'
         else:
-            message = 'نام یا نام خانوادگی وارد شده معتبر نمی‌باشد'
+            message = 'اطلاعات وارد شده معتبر نمی‌باشد'
     else:
         message = ""
-        form = EditProfileForm()
-    return render(request, 'people/edit_profile.html', {'form': form, 'message': message})
+        form1 = EditProfileUserForm(instance=request.user)
+        form2 = EditProfileStudentForm(instance=request.user.student)
+
+    return render(request, 'people/edit_profile.html', {'form1': form1,
+                                                        'form2': form2,
+                                                        'message': message})
