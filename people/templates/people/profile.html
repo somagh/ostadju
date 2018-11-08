@@ -3,6 +3,8 @@
 {% block content %}
     <h2>پروفایل</h2>
 
+    <a href="{% url 'people:edit_profile' %}">تغییر تنظیمات</a>
+
     <p id="text_firstname">نام:
         {{user.first_name}}</p>
     <p id="text_lastname"> نام خانوادگی:

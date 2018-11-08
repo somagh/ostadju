@@ -1,9 +1,15 @@
 {% extends "base.html" %}
+
 {% block content %}
-    <h2>ارتباط با ما</h2>
+    <h2>پروفایل</h2>
+
+    {% if message %}
+        <strong>{{ message }}</strong>
+    {% endif %}
     <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button id="signup_submit" type="submit">ارسال</button>
+        <p><input type="submit" value="ارسال"/></p>
     </form>
+
 {% endblock content %}
