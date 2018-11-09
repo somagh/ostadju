@@ -1,10 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import user_passes_test
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 
-from people.decorators import is_student_check
-from people.forms import SignUpForm, ContactUsForm, EditProfileStudentForm, EditProfileUserForm
+from people.forms import SignUpForm, ContactUsForm, EditProfileUserForm
 from people.models import User
 
 
@@ -35,8 +33,7 @@ def contact_us(request):
 
 
 @login_required
-@user_passes_test(test_func=is_student_check)
-def student_profile_view(request, username=""):
+def profile(request, username=""):
     if username:
         try:
             user = User.objects.get(username=username)
@@ -48,24 +45,19 @@ def student_profile_view(request, username=""):
 
 
 @login_required
-@user_passes_test(test_func=is_student_check)
 def edit_profile(request):
     if request.method == 'POST':
 
-        form1 = EditProfileUserForm(instance=request.user, data=request.POST)
-        form2 = EditProfileStudentForm(instance=request.user.student, data=request.POST)
+        form = EditProfileUserForm(instance=request.user, data=request.POST)
 
-        if form1.is_valid() and form2.is_valid():
-            form1.save()
-            form2.save()
+        if form.is_valid():
+            form.save()
             return redirect('people:profile')
         else:
             message = 'اطلاعات وارد شده معتبر نمی‌باشد'
     else:
         message = ""
-        form1 = EditProfileUserForm(instance=request.user)
-        form2 = EditProfileStudentForm(instance=request.user.student)
+        form = EditProfileUserForm(instance=request.user)
 
-    return render(request, 'people/edit_profile.html', {'form1': form1,
-                                                        'form2': form2,
+    return render(request, 'people/edit_profile.html', {'form': form,
                                                         'message': message})

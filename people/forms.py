@@ -1,7 +1,7 @@
 from django import forms
 from registration.forms import RegistrationForm
 
-from people.models import User, Student
+from people.models import User
 
 
 class SignUpForm(RegistrationForm):
@@ -34,9 +34,10 @@ class SignUpForm(RegistrationForm):
 
     def save(self, commit=True):
         user = super().save(False)
-        user.is_student = True
-        user.save()
-        user.student = Student.objects.create(user=user)
+        user.is_student = True  # TODO maybe he/she was a teacher
+        if commit:  # anyway we need to save this user
+            user.save()
+        # user.student = Student.objects.create(user=user)
         return user
 
 
@@ -49,14 +50,8 @@ class ContactUsForm(forms.Form):
 class EditProfileUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name']
+        fields = ['first_name', 'last_name', 'bio', 'gender']
         labels = {
             "first_name": "نام",
             "last_name": "نام خانوادگی"
         }
-
-
-class EditProfileStudentForm(forms.ModelForm):
-    class Meta:
-        model = Student
-        fields = ['gender', 'bio']

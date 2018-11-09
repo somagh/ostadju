@@ -13,8 +13,8 @@
     <p id="text_username"> نام کاربری:
         {{ user.username }}</p>
     <p id="text_gender">جنسیت :
-        {{ user.student.get_gender_display }}</p>
+        {{ user.get_gender_display }}</p>
     <p id="text_bio">زندگی نامه:
-        {{ user.student.bio }}</p>
+        {{ user.bio }}</p>
 
 {% endblock content %}
