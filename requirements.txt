@@ -1,4 +1,4 @@
 Django==1.11
-pytz==2018.7
-wheel==0.24.0
+django-markdownx==2.0.25
 Pillow==5.3.0
+pytz==2018.7
