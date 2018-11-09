@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from markdownx.models import MarkdownxField
+from markdownx.utils import markdownify
 
 from people.constants import GENDER_CHOICES
 
@@ -11,9 +13,13 @@ def get_picture_filename(instance, filename):
 class User(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
-    bio = models.TextField(max_length=500, blank=True, verbose_name="زندگی نامه")
+    bio = MarkdownxField(max_length=500, blank=True, verbose_name="زندگی نامه")
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, verbose_name="جنسیت")
     picture = models.ImageField(null=True, upload_to=get_picture_filename, verbose_name="عکس پروفایل")
+
+    @property
+    def get_bio(self):
+        return markdownify(self.bio)
 
     def __str__(self):
         return self.username
