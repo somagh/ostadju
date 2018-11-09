@@ -17,5 +17,7 @@
     <p id="text_bio">زندگی نامه:
         <br>
         {{ user.get_bio|safe }}</p>
+    {% if user.picture %}
     <img id="profile-image" src="{{ user.picture.url }}"/>
+    {% endif %}
 {% endblock content %}

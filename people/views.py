@@ -26,7 +26,8 @@ def contact_us(request):
                           form.cleaned_data['email'], form.cleaned_data['text']), from_email=form.cleaned_data['email'],
                       recipient_list=["ostadju@fastmail.com"],
                       fail_silently=True)
-            return render(request, 'people/contact_us_success.html')
+            return render(request, 'base.html', {'message': 'درخواست شما ثبت شد.'})
+
     else:
         form = ContactUsForm()
     return render(request, 'people/contact_us.html', {'form': form})
