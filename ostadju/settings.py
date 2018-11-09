@@ -129,3 +129,6 @@ EMAIL_HOST_USER = 'thefake1453@gmail.com'
 EMAIL_HOST_PASSWORD = 'khalilmalil'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
+
+MEDIA_ROOT = "media/"
+MEDIA_URL = "/media/"

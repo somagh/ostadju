@@ -16,5 +16,5 @@
         {{ user.get_gender_display }}</p>
     <p id="text_bio">زندگی نامه:
         {{ user.bio }}</p>
-
+    <img id="profile-image" src="{{ user.picture.url }}"/>
 {% endblock content %}

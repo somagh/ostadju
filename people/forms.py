@@ -50,7 +50,7 @@ class ContactUsForm(forms.Form):
 class EditProfileUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'bio', 'gender']
+        fields = ['first_name', 'last_name', 'bio', 'gender', 'picture']
         labels = {
             "first_name": "نام",
             "last_name": "نام خانوادگی"
