@@ -1,4 +1,3 @@
-# coding=utf-8
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.core.mail import send_mail
@@ -6,9 +5,7 @@ from django.shortcuts import render, redirect
 
 from people.decorators import is_student_check
 from people.forms import SignUpForm, ContactUsForm, EditProfileStudentForm, EditProfileUserForm
-
-
-# Create your views here.
+from people.models import User
 
 
 def signup(request):
@@ -38,8 +35,16 @@ def contact_us(request):
 
 
 @login_required
-def profile(request):
-    return render(request, 'people/profile.html', {'user': request.user})
+@user_passes_test(test_func=is_student_check)
+def student_profile_view(request, username=""):
+    if username:
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return render(request, 'base.html', {'message': 'کاربری با این نام کاربری وجود ندارد'})
+    else:
+        user = request.user
+    return render(request, 'people/profile.html', {'user': user})
 
 
 @login_required
@@ -53,7 +58,7 @@ def edit_profile(request):
         if form1.is_valid() and form2.is_valid():
             form1.save()
             form2.save()
-            message = 'درخواست شما با موفقیت انجام شد'
+            return redirect('people:profile')
         else:
             message = 'اطلاعات وارد شده معتبر نمی‌باشد'
     else:

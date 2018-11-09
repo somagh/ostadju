@@ -3,13 +3,18 @@
 {% block content %}
     <h2>پروفایل</h2>
 
-    <a href="{% url 'people:edit_profile' %}" id="edit_profile">تغییر تنظیمات</a>
-
+    {% if request.user == user %}
+        <a href="{% url 'people:edit_profile' %}" id="edit_profile">تغییر تنظیمات</a>
+    {% endif %}
     <p id="text_firstname">نام:
-        {{user.first_name}}</p>
+        {{ user.first_name }}</p>
     <p id="text_lastname"> نام خانوادگی:
-        {{user.last_name}}</p>
+        {{ user.last_name }}</p>
     <p id="text_username"> نام کاربری:
-        {{user.username}}</p>
+        {{ user.username }}</p>
+    <p id="text_gender">جنسیت :
+        {{ user.student.get_gender_display }}</p>
+    <p id="text_bio">زندگی نامه:
+        {{ user.student.bio }}</p>
 
 {% endblock content %}

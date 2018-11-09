@@ -3,9 +3,6 @@
 {% block content %}
     <h2>پروفایل</h2>
 
-    {% if message %}
-        <strong>{{ message }}</strong>
-    {% endif %}
     <form action="" method="post">
         {% csrf_token %}
         {{ form1.as_p }}
