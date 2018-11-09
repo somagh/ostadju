@@ -28,6 +28,7 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
+
 INSTALLED_APPS = [
     'registration',
 
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'people',
 ]
 
