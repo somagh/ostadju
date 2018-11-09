@@ -1,11 +1,11 @@
 from django import forms
-from registration.forms import RegistrationForm
+from django.contrib.auth.forms import UserCreationForm
 
 from people.models import User
 
 
-class SignUpForm(RegistrationForm):
-    class Meta(RegistrationForm.Meta):
+class SignUpForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
         error_messages = {
