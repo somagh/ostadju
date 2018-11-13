@@ -222,3 +222,5 @@ pip-selfcheck.json
 
 .idea/
 .vscode/
+
+static/

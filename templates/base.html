@@ -1,6 +1,11 @@
+{% load static %}
 <html>
 <title>استادجو</title>
 
+<head>
+    <link rel="stylesheet" type="text/css"  href="{% static 'markdownx/admin/css/markdownx.css' %}">
+    <link rel="stylesheet" type="text/css"  href="{% static 'markdownx/js/markdownx.js' %}">
+</head>
 <body>
     <nav id="navbar">
         <a id="navbar_home" href="{% url 'home' %}">خانه</a>
