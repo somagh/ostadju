@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
 
@@ -21,6 +22,9 @@ class User(AbstractUser):
     def get_bio(self):
         return markdownify(self.bio)
 
+    def profile_url(self):
+        return reverse("people:profile", kwargs={"username": self.username})
+
     def __str__(self):
         return self.username
 
@@ -30,6 +34,16 @@ class Student(models.Model):
                                 on_delete=models.CASCADE,
                                 primary_key=True,
                                 related_name="student", )
+
+    def __str__(self):
+        return self.user.__str__()
+
+
+class Teacher(models.Model):
+    user = models.OneToOneField(User,
+                                on_delete=models.CASCADE,
+                                primary_key=True,
+                                related_name="teacher", )
 
     def __str__(self):
         return self.user.__str__()

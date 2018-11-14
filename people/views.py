@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
+from django.views.generic import ListView
 
 from people.forms import SignUpForm, ContactUsForm, EditProfileUserForm
-from people.models import User
+from people.models import User, Teacher
 
 
 def signup(request):
@@ -61,3 +62,16 @@ def edit_profile(request):
 
     return render(request, 'people/edit_profile.html', {'form': form,
                                                         'message': message})
+
+
+class SearchProfiles(ListView):
+    model = Teacher
+    template_name = "people/search_profiles.html"
+    context_object_name = "teachers"
+
+    def get_queryset(self):
+        text = self.request.GET.get("text", "")
+        query_set = Teacher.objects.filter(user__first_name__contains=text)
+        query_set |= Teacher.objects.filter(user__last_name__contains=text)
+        query_set |= Teacher.objects.filter(user__username__contains=text)
+        return query_set
