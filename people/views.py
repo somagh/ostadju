@@ -5,7 +5,7 @@ from django.views.generic import ListView
 
 from people.decorators import is_teacher_check
 from people.forms import SignUpForm, ContactUsForm, EditProfileUserForm, TeacherFreeTimeForm
-from people.models import User, Teacher
+from people.models import User, Teacher, TeacherFreeTimes
 
 
 def signup(request):
@@ -78,6 +78,7 @@ class SearchProfiles(ListView):
         return query_set
 
 
+@login_required()
 @user_passes_test(test_func=is_teacher_check)
 def new_teacher_free_time(request):
     if request.method == "POST":
@@ -90,3 +91,10 @@ def new_teacher_free_time(request):
     else:
         form = TeacherFreeTimeForm()
     return render(request, 'people/new_teacher_free_time.html', {"form": form})
+
+
+@login_required()
+@user_passes_test(test_func=is_teacher_check)
+def teacher_free_times(request):
+    free_times = TeacherFreeTimes.objects.filter(teacher=request.user.teacher)
+    return render(request, 'people/teacher_free_times.html', {'free_times': free_times})

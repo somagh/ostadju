@@ -14,6 +14,7 @@
         <a id="navbar_profile" href="{{ request.user.profile_url }}">پروفایل</a>
         {% if request.user.is_teacher %}
             <a id="navbar_new_free_time" href="{% url 'people:new_free_time' %}">اضافه کردن فرصت</a>
+            <a id="navbar_free_times" href="{% url 'people:free_times' %}">فرصت های شما</a>
         {% endif %}
     {% else %}
         <a id="navbar_login" href="{% url 'people:login' %}">ورود</a>

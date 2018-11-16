@@ -81,4 +81,5 @@ class TeacherFreeTimeForm(forms.ModelForm):
             'start': forms.SplitDateTimeField,
         }
 
+# TODO validate form have not intersect ...
 # TODO check self.end > self.start.time
