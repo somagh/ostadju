@@ -1,13 +1,15 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from people.models import User
+from people.models import User, Student, Teacher
 
 
 class SignUpForm(UserCreationForm):
+    type = forms.ChoiceField(choices=[('student','دانشجو'), ('teacher','استاد')], widget=forms.RadioSelect, required=True)
+
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
         error_messages = {
             'username': {
                 'unique': "کاربری با نام کاربری وارد شده وجود دارد."
@@ -22,6 +24,7 @@ class SignUpForm(UserCreationForm):
         self.fields['first_name'].label = "نام"
         self.fields['last_name'].label = "نام خانوادگی"
         self.fields['email'].label = "ایمیل"
+        # self.fields['type'].label = "نوع"
 
         self.error_messages['password_mismatch'] = "گذرواژه و تکرار گذرواژه یکسان نیستند."
 
@@ -34,10 +37,16 @@ class SignUpForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(False)
-        user.is_student = True  # TODO maybe he/she was a teacher
+        # user.is_student = True
+        user.is_student = self.cleaned_data['type'] == 'student'
+        user.is_teacher = self.cleaned_data['type'] == 'teacher'
         if commit:  # anyway we need to save this user
             user.save()
-        # user.student = Student.objects.create(user=user)
+        if user.is_student:
+            user.student = Student.objects.create(user=user)
+        if user.is_teacher:
+            user.teacher = Teacher.objects.create(user=user)
+
         return user
 
 
