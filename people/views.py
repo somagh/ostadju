@@ -86,7 +86,7 @@ def new_teacher_free_time(request):
             instance = form.save(False)
             instance.teacher = request.user.teacher
             instance.save()
-            redirect('home')
+            return redirect('home')
     else:
         form = TeacherFreeTimeForm()
     return render(request, 'people/new_teacher_free_time.html', {"form": form})

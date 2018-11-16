@@ -77,4 +77,8 @@ class TeacherFreeTimeForm(forms.ModelForm):
             'end': AdminTimeWidget(),
             'student_capacity': AdminIntegerFieldWidget(),
         }
+        field_classes = {
+            'start': forms.SplitDateTimeField,
+        }
+
 # TODO check self.end > self.start.time
