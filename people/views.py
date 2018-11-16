@@ -70,7 +70,7 @@ class SearchProfiles(ListView):
     context_object_name = "teachers"
 
     def get_queryset(self):
-        text = self.request.GET.get("text", "")
+        text = self.request.GET.get("search", "")
         query_set = Teacher.objects.filter(user__first_name__contains=text)
         query_set |= Teacher.objects.filter(user__last_name__contains=text)
         query_set |= Teacher.objects.filter(user__username__contains=text)

@@ -24,7 +24,7 @@ class SignUpForm(UserCreationForm):
         self.fields['first_name'].label = "نام"
         self.fields['last_name'].label = "نام خانوادگی"
         self.fields['email'].label = "ایمیل"
-        # self.fields['type'].label = "نوع"
+        self.fields['type'].label = "نوع"
 
         self.error_messages['password_mismatch'] = "گذرواژه و تکرار گذرواژه یکسان نیستند."
 

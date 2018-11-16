@@ -3,16 +3,22 @@
     <ul>
         {% for teacher in teachers %}
             <li>
-                <a href="{{ teacher.user.profile_url }}" id="teacher{{ forloop.counter0 }}-username">
+                <p>
                     نام کاربری :‌
+                </p>
+                <a href="{{ teacher.user.profile_url }}" id="teacher{{ forloop.counter0 }}-username">
                     {{ teacher.user.username }}
                 </a>
-                <p id="teacher{{ forloop.counter0 }}-first_name">
+                <p>
                     نام :‌
+                </p>
+                <p id="teacher{{ forloop.counter0 }}-first_name">
                     {{ teacher.user.first_name }}
                 </p>
-                <p id="teacher{{ forloop.counter0 }}-last_name">
+                <p>
                     نام خانوادگی :‌
+                </p>
+                <p id="teacher{{ forloop.counter0 }}-last_name">
                     {{ teacher.user.last_name }}
                 </p>
 
