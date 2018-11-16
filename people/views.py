@@ -1,9 +1,10 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 
-from people.forms import SignUpForm, ContactUsForm, EditProfileUserForm
+from people.decorators import is_teacher_check
+from people.forms import SignUpForm, ContactUsForm, EditProfileUserForm, TeacherFreeTimeForm
 from people.models import User, Teacher
 
 
@@ -75,3 +76,17 @@ class SearchProfiles(ListView):
         query_set |= Teacher.objects.filter(user__last_name__contains=text)
         query_set |= Teacher.objects.filter(user__username__contains=text)
         return query_set
+
+
+@user_passes_test(test_func=is_teacher_check)
+def new_teacher_free_time(request):
+    if request.method == "POST":
+        form = TeacherFreeTimeForm(data=request.POST)
+        if form.is_valid():
+            instance = form.save(False)
+            instance.teacher = request.user.teacher
+            instance.save()
+            redirect('home')
+    else:
+        form = TeacherFreeTimeForm()
+    return render(request, 'people/new_teacher_free_time.html', {"form": form})

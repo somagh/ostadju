@@ -1,15 +1,17 @@
 from django import forms
+from django.contrib.admin.widgets import AdminSplitDateTime, AdminIntegerFieldWidget, AdminTimeWidget
 from django.contrib.auth.forms import UserCreationForm
 
-from people.models import User, Student, Teacher
+from people.models import User, Student, Teacher, TeacherFreeTimes
 
 
 class SignUpForm(UserCreationForm):
-    type = forms.ChoiceField(choices=[('student','دانشجو'), ('teacher','استاد')], widget=forms.RadioSelect, required=True)
+    type = forms.ChoiceField(choices=[('student', 'دانشجو'), ('teacher', 'استاد')], widget=forms.RadioSelect,
+                             required=True)
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
         error_messages = {
             'username': {
                 'unique': "کاربری با نام کاربری وارد شده وجود دارد."
@@ -64,3 +66,15 @@ class EditProfileUserForm(forms.ModelForm):
             "first_name": "نام",
             "last_name": "نام خانوادگی"
         }
+
+
+class TeacherFreeTimeForm(forms.ModelForm):
+    class Meta:
+        model = TeacherFreeTimes
+        fields = ['start', 'end', 'student_capacity']
+        widgets = {
+            'start': AdminSplitDateTime(),
+            'end': AdminTimeWidget(),
+            'student_capacity': AdminIntegerFieldWidget(),
+        }
+# TODO check self.end > self.start.time
