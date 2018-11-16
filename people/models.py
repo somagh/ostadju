@@ -47,3 +47,12 @@ class Teacher(models.Model):
 
     def __str__(self):
         return self.user.__str__()
+
+
+class TeacherFreeTimes(models.Model):
+    start = models.DateTimeField(null=False, blank=False, verbose_name="زمان شروع")
+    end = models.TimeField(null=False, blank=False, verbose_name="ساعت پایان")
+    student_capacity = models.IntegerField(null=False, blank=False, verbose_name="ظرفیت")
+
+    def __str__(self):
+        return self.start.__str__() + " " + self.end.__str__() + " " + self.student_capacity.__str__()
