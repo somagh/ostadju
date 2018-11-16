@@ -50,9 +50,13 @@ class Teacher(models.Model):
 
 
 class TeacherFreeTimes(models.Model):
+    teacher = models.ForeignKey(Teacher, null=False, blank=False, verbose_name="استاد")
     start = models.DateTimeField(null=False, blank=False, verbose_name="زمان شروع")
     end = models.TimeField(null=False, blank=False, verbose_name="ساعت پایان")
     student_capacity = models.IntegerField(null=False, blank=False, verbose_name="ظرفیت")
 
     def __str__(self):
-        return self.start.__str__() + " " + self.end.__str__() + " " + self.student_capacity.__str__()
+        return self.teacher.__str__() + " " + \
+               self.start.__str__() + " " + \
+               self.end.__str__() + " " + \
+               self.student_capacity.__str__()
