@@ -14,6 +14,7 @@
         <a id="navbar_profile" href="{{ request.user.profile_url }}">پروفایل</a>
         {% if request.user.is_teacher %}
             <a id="navbar_new_free_time" href="{% url 'people:new_free_time' %}">اضافه کردن فرصت</a>
+            <a id="navbar_free_times" href="{% url 'people:free_times' %}">فرصت های شما</a>
         {% endif %}
     {% else %}
         <a id="navbar_login" href="{% url 'people:login' %}">ورود</a>
@@ -22,16 +23,16 @@
     <a id="navbar_contact_us" href="{% url 'people:contact_us' %}">تماس با ما</a>
 </nav>
 <br>
-{% if message %}
-    <strong>{{ message }}</strong>
-    <br>
-{% endif %}
 <div id="search_profiles">
     <form id="search_profiles" action="{% url 'people:search_profiles' %}" method="get">
         <input id="search_profiles" type="text" placeholder="جستجو..." name="search">
         <button id="search_profiles" type="submit">برو</button>
     </form>
 </div>
+{% if message %}
+    <strong>{{ message }}</strong>
+    <br>
+{% endif %}
 {% block content %}
 {% endblock %}
 </body>
