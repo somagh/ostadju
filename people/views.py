@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 
@@ -108,3 +109,15 @@ def delete_teacher_free_time(request, free_time_id):
     except TeacherFreeTimes.DoesNotExist:
         message = 'فرصتی با شماره داده شده وجود ندارد'
     return render(request, 'base.html', {'message': message})
+
+
+def search_teachers_api_view(request):
+    query = request.GET.get('query', '')
+    query_set = Teacher.objects.filter(user__first_name__contains=query)
+    query_set |= Teacher.objects.filter(user__last_name__contains=query)
+    query_set |= Teacher.objects.filter(user__username__contains=query)
+
+    result = []
+    for teacher in query_set:
+        result.append(teacher.user.json())
+    return JsonResponse(result, safe=False)

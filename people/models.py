@@ -28,6 +28,13 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+    def json(self):
+        return {
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'profile_url': self.profile_url(),
+        }
+
 
 class Student(models.Model):
     user = models.OneToOneField(User,
