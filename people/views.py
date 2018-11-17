@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 
 from people.decorators import is_teacher_check
 from people.forms import SignUpForm, ContactUsForm, EditProfileUserForm, TeacherFreeTimeForm
-from people.models import User, Teacher
+from people.models import User, Teacher, TeacherFreeTimes
 
 
 def signup(request):
@@ -78,6 +79,7 @@ class SearchProfiles(ListView):
         return query_set
 
 
+@login_required()
 @user_passes_test(test_func=is_teacher_check)
 def new_teacher_free_time(request):
     if request.method == "POST":
@@ -86,7 +88,36 @@ def new_teacher_free_time(request):
             instance = form.save(False)
             instance.teacher = request.user.teacher
             instance.save()
-            return redirect('home')
+            return render(request, 'base.html', {'message': "درخواست شما با موفقیت ثبت شد"})
     else:
         form = TeacherFreeTimeForm()
     return render(request, 'people/new_teacher_free_time.html', {"form": form})
+
+
+@login_required()
+@user_passes_test(test_func=is_teacher_check)
+def teacher_free_times(request):
+    free_times = TeacherFreeTimes.objects.filter(teacher=request.user.teacher)
+    return render(request, 'people/teacher_free_times.html', {'free_times': free_times})
+
+
+def delete_teacher_free_time(request, free_time_id):
+    try:
+        teacher_free_time = TeacherFreeTimes.objects.get(id=free_time_id)
+        teacher_free_time.delete()
+        message = 'فرصت مورد نظر حذف شد'
+    except TeacherFreeTimes.DoesNotExist:
+        message = 'فرصتی با شماره داده شده وجود ندارد'
+    return render(request, 'base.html', {'message': message})
+
+
+def search_teachers_api_view(request):
+    query = request.GET.get('query', '')
+    query_set = Teacher.objects.filter(user__first_name__contains=query)
+    query_set |= Teacher.objects.filter(user__last_name__contains=query)
+    query_set |= Teacher.objects.filter(user__username__contains=query)
+
+    result = []
+    for teacher in query_set:
+        result.append(teacher.user.json())
+    return JsonResponse(result, safe=False)
