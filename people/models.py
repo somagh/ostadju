@@ -67,3 +67,6 @@ class TeacherFreeTimes(models.Model):
                self.start.__str__() + " " + \
                self.end.__str__() + " " + \
                self.student_capacity.__str__()
+
+    class Meta:
+        verbose_name_plural = "Teacher Free Times"
