@@ -88,7 +88,7 @@ def new_teacher_free_time(request):
             instance = form.save(False)
             instance.teacher = request.user.teacher
             instance.save()
-            return redirect('home')
+            return render(request, 'base.html', {'message': "درخواست شما با موفقیت ثبت شد"})
     else:
         form = TeacherFreeTimeForm()
     return render(request, 'people/new_teacher_free_time.html', {"form": form})
