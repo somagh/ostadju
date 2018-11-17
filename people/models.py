@@ -14,7 +14,7 @@ def get_picture_filename(instance, filename):
 class User(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
-    bio = MarkdownxField(max_length=500, blank=True, verbose_name="زندگی نامه")
+    bio = MarkdownxField(max_length=500, blank=True, verbose_name="زندگی نامه", default="")
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, verbose_name="جنسیت", blank=True)
     picture = models.ImageField(null=True, upload_to=get_picture_filename, verbose_name="عکس پروفایل", blank=True)
 

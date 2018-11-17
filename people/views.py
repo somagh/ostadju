@@ -54,7 +54,7 @@ def edit_profile(request):
 
         if form.is_valid():
             form.save()
-            return redirect('people:profile')
+            return redirect(request.user.profile_url())
         else:
             message = 'اطلاعات وارد شده معتبر نمی‌باشد'
     else:
