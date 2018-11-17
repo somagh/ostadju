@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.admin.widgets import AdminSplitDateTime, AdminIntegerFieldWidget, AdminTimeWidget
 from django.contrib.auth.forms import UserCreationForm
+from django.forms.widgets import SelectDateWidget
 
 from people.models import User, Student, Teacher, TeacherFreeTimes
 
@@ -69,6 +70,10 @@ class EditProfileUserForm(forms.ModelForm):
 
 
 class TeacherFreeTimeForm(forms.ModelForm):
+    widget = forms.widgets.DateTimeInput(attrs={'type': 'date', 'class': 'datetimeshortcuts'})
+    start = forms.DateTimeField(widget=widget)
+    end = forms.DateTimeField(widget=widget)
+
     class Meta:
         model = TeacherFreeTimes
         fields = ['start', 'end', 'student_capacity']
