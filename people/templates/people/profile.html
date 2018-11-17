@@ -5,6 +5,17 @@
 
     {% if request.user == user %}
         <a href="{% url 'people:edit_profile' %}" id="edit_profile">تغییر تنظیمات</a>
+        <p>
+            شما به عنوان
+            <b>
+                {% if request.user.is_teacher %}
+                    استاد
+                {% else %}
+                    دانشجو
+                {% endif %}
+            </b>
+            وارد شده اید
+        </p>
     {% endif %}
     <p id="text_firstname">نام:
         {{ user.first_name }}</p>
