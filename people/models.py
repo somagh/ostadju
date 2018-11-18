@@ -64,7 +64,7 @@ class TeacherFreeTimes(models.Model):
     start = models.TimeField(null=False, blank=False, verbose_name="ساعت شروع")
     end = models.TimeField(null=False, blank=False, verbose_name="ساعت پایان")
     student_capacity = models.PositiveIntegerField(null=False, blank=False, verbose_name="ظرفیت")
-    reserved = models.ManyToManyField(Student, blank=True, default=[], through="ReservedFreeTimes",)
+    reserved = models.ManyToManyField(Student, blank=True, default=[], through="ReservedFreeTimes")
 
     def free_capacity(self):
         return self.student_capacity - self.reserved.count()
@@ -108,3 +108,11 @@ class ReservedFreeTimes(models.Model):
 
     class Meta:
         verbose_name_plural = 'Reserved Free Times'
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False, related_name="notifications")
+    text = models.TextField(null=False, blank=True)
+
+    def __str__(self):
+        return self.user.__str__() + " " + self.text

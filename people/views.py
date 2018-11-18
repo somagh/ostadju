@@ -6,7 +6,7 @@ from django.views.generic import ListView
 
 from people.decorators import is_teacher_check
 from people.forms import SignUpForm, ContactUsForm, EditProfileUserForm, TeacherFreeTimeForm
-from people.models import User, Teacher, TeacherFreeTimes
+from people.models import User, Teacher, TeacherFreeTimes, Notification
 
 
 def signup(request):
@@ -133,3 +133,16 @@ def update_teacher_free_time(request, free_time_id):
     else:
         form = TeacherFreeTimeForm(instance=free_time)
     return render(request, 'people/teacher_free_time_form.html', {"form": form, 'message': message})
+
+
+@login_required()
+def seen_notification(request, notification_id):
+    try:
+        notification = Notification.objects.get(id=notification_id)
+        if notification.user != request.user:
+            return render(request, 'home.html', {'message': 'اطلاعیه مورد نظر متعلق به شما نیست'})
+        else:
+            notification.delete()
+            return redirect('home')
+    except Notification.DoesNotExist:
+        return render(request, 'home.html', {'message': 'اطلاعیه ای با شماره داده شده وجود ندارد'})
