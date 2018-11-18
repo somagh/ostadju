@@ -44,6 +44,11 @@ def profile(request, username):
     free_times = ""
     if user.is_teacher:
         free_times = TeacherFreeTimes.objects.filter(teacher=user.teacher)
+    elif user.is_student:
+        query_set = ReservedFreeTimes.objects.filter(student=request.user.student)
+        free_times = []
+        for query in query_set:
+            free_times.append(query.free_time)
     return render(request, 'people/profile.html', {'user': user,
                                                    'free_times': free_times})
 
