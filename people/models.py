@@ -89,5 +89,5 @@ class TeacherFreeTimes(models.Model):
         have_intersect_error = "بازه زمانی انتخاب شده با فرصت های قبلی شما اشتراک دارد"
         q = TeacherFreeTimes.objects.filter(teacher=self.teacher, date=self.date)
         for x in q:
-            if (x.start <= self.start <= x.end) or (x.start <= self.end <= x.end):
+            if not ((x.end < self.start) or (self.end < x.start)):
                 raise ValidationError(have_intersect_error)
