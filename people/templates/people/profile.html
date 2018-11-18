@@ -73,22 +73,22 @@
         </ul>
     {% elif request.user.is_student %}
         <ul id="reserved-free-times">
-        {% for free_time in free_times %}
-            <li id="reserved-free-time-{{ forloop.counter0 }}">
-                <p id="teacher-full-name">
-                    {{ free_time.teacher.user.get_full_name }}
-                </p>
-                <p id="date">
-                    {{ free_time.date|safe }}
-                </p>
-                <p id="start">
-                    {{ free_time.start|safe }}
-                </p>
-                <p id="end">
-                    {{ free_time.end|safe }}
-                </p>
-            </li>
-        {% endfor %}
+            {% for free_time in free_times %}
+                <li id="reserved-free-time-{{ forloop.counter0 }}">
+                    <p id="teacher-full-name">
+                        {{ free_time.teacher.user.get_full_name }}
+                    </p>
+                    <p id="date">
+                        {{ free_time.date|safe }}
+                    </p>
+                    <p id="start">
+                        {{ free_time.start|safe }}
+                    </p>
+                    <p id="end">
+                        {{ free_time.end|safe }}
+                    </p>
+                </li>
+            {% endfor %}
         </ul>
     {% endif %}
 {% endblock content %}
