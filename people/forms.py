@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.admin.widgets import AdminSplitDateTime, AdminIntegerFieldWidget, AdminTimeWidget
+from django.contrib.admin.widgets import AdminIntegerFieldWidget, AdminTimeWidget, AdminDateWidget
 from django.contrib.auth.forms import UserCreationForm
 
 from people.models import User, Student, Teacher, TeacherFreeTimes
@@ -71,15 +71,21 @@ class EditProfileUserForm(forms.ModelForm):
 class TeacherFreeTimeForm(forms.ModelForm):
     class Meta:
         model = TeacherFreeTimes
-        fields = ['start', 'end', 'student_capacity']
+        fields = ['date', 'start', 'end', 'student_capacity', ]
         widgets = {
-            'start': AdminSplitDateTime(),
+            'date': AdminDateWidget(),
+            'start': AdminTimeWidget(),
             'end': AdminTimeWidget(),
             'student_capacity': AdminIntegerFieldWidget(),
         }
-        field_classes = {
-            'start': forms.SplitDateTimeField,
+        error_messages = {
+            'end': {
+                'invalid': 'زمان پایان وارد شده معتبر نمی‌باشد'
+            },
+            'start': {
+                'invalid': 'زمان شروع وارد شده معتبر نمی‌باشد'
+            },
+            'date': {
+                'invalid': 'تاریخ وارد شده معتبر نمی‌باشد'
+            },
         }
-
-# TODO validate form have not intersect ...
-# TODO check self.end > self.start.time
