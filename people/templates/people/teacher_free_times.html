@@ -4,12 +4,22 @@
     <h2>فرصت های شما</h2>
     <ul>
         {% for free_time in free_times %}
-            <li>
-                {{ free_time.start }}
+            <li id="free-time-{{ forloop.counter0 }}">
+                <div id="free-time-date">
+                    {{ free_time.date }}
+                </div>
                 <br>
-                {{ free_time.end }}
+                <div id="free-time-start">
+                    {{ free_time.start }}
+                </div>
                 <br>
-                {{ free_time.student_capacity }}
+                <div id="free-time-end">
+                    {{ free_time.end }}
+                </div>
+                <br>
+                <div id="free-time-student_capacity">
+                    {{ free_time.student_capacity }}
+                </div>
             </li>
             <br>
         {% endfor %}

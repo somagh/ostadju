@@ -59,12 +59,14 @@ class Teacher(models.Model):
 
 class TeacherFreeTimes(models.Model):
     teacher = models.ForeignKey(Teacher, null=False, blank=False, verbose_name="استاد")
-    start = models.DateTimeField(null=False, blank=False, verbose_name="زمان شروع")
+    date = models.DateField(null=False, blank=False, verbose_name="تاریخ")
+    start = models.TimeField(null=False, blank=False, verbose_name="ساعت شروع")
     end = models.TimeField(null=False, blank=False, verbose_name="ساعت پایان")
-    student_capacity = models.PositiveIntegerField(null=False, blank=False, verbose_name="ظرفیت", )
+    student_capacity = models.PositiveIntegerField(null=False, blank=False, verbose_name="ظرفیت")
 
     def __str__(self):
         return self.teacher.__str__() + " " + \
+               self.date.__str__() + " " + \
                self.start.__str__() + " " + \
                self.end.__str__() + " " + \
                self.student_capacity.__str__()
@@ -80,16 +82,12 @@ class TeacherFreeTimes(models.Model):
                 self.clean_start()
 
     def clean_end(self):
-        if self.start.time() >= self.end:
+        if self.start >= self.end:
             raise ValidationError("زمان شروع باید قبل از زمان پایان فرصت باشد")
 
     def clean_start(self):
         have_intersect_error = "بازه زمانی انتخاب شده با فرصت های قبلی شما اشتراک دارد"
-        q = TeacherFreeTimes.objects.filter(teacher=self.teacher,
-                                            start__day=self.start.day,
-                                            start__month=self.start.month,
-                                            start__year=self.start.year)
+        q = TeacherFreeTimes.objects.filter(teacher=self.teacher, date=self.date)
         for x in q:
-            if (x.start <= self.start and x.end >= self.start.time()) or \
-                    (x.start.time() <= self.end <= x.end):
+            if (x.start <= self.start <= x.end) or (x.start <= self.end <= x.end):
                 raise ValidationError(have_intersect_error)
