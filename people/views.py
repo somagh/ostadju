@@ -95,16 +95,19 @@ def new_teacher_free_time(request):
 
 @login_required()
 @user_passes_test(test_func=is_teacher_check)
-def teacher_free_times(request):
-    free_times = TeacherFreeTimes.objects.filter(teacher=request.user.teacher)
+def teacher_free_times(request, teacher_username):
+    free_times = TeacherFreeTimes.objects.filter(teacher__user__username=teacher_username)
     return render(request, 'people/teacher_free_times.html', {'free_times': free_times})
 
 
 def delete_teacher_free_time(request, free_time_id):
     try:
         teacher_free_time = TeacherFreeTimes.objects.get(id=free_time_id)
-        teacher_free_time.delete()
-        message = 'فرصت مورد نظر حذف شد'
+        if teacher_free_time.teacher != request.user.teacher:
+            message = "فرصت مورد نظر متعلق به شما نیست"
+        else:
+            teacher_free_time.delete()
+            message = 'فرصت مورد نظر حذف شد'
     except TeacherFreeTimes.DoesNotExist:
         message = 'فرصتی با شماره داده شده وجود ندارد'
     return render(request, 'base.html', {'message': message})

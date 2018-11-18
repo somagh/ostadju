@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.urls import reverse
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
@@ -88,6 +89,8 @@ class TeacherFreeTimes(models.Model):
     def clean_start(self):
         have_intersect_error = "بازه زمانی انتخاب شده با فرصت های قبلی شما اشتراک دارد"
         q = TeacherFreeTimes.objects.filter(teacher=self.teacher, date=self.date)
+        if self.id:
+            q.filter(~Q(id=self.id))
         for x in q:
             if not ((x.end < self.start) or (self.end < x.start)):
                 raise ValidationError(have_intersect_error)
