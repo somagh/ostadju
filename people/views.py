@@ -90,7 +90,7 @@ def new_teacher_free_time(request):
             return render(request, 'base.html', {'message': "درخواست شما با موفقیت ثبت شد"})
     else:
         form = TeacherFreeTimeForm()
-    return render(request, 'people/new_teacher_free_time.html', {"form": form})
+    return render(request, 'people/teacher_free_time_form.html', {"form": form})
 
 
 @login_required()
@@ -123,3 +123,20 @@ def search_teachers_api_view(request):
     for teacher in query_set:
         result.append(teacher.user.json())
     return JsonResponse(result, safe=False)
+
+
+@login_required()
+@user_passes_test(test_func=is_teacher_check)
+def update_teacher_free_time(request, free_time_id):
+    free_time = TeacherFreeTimes.objects.get(id=free_time_id)
+    message = ""
+    if free_time.teacher != request.user.teacher:
+        message = "فرصت مورد نظر متعلق به شما نیست"
+    if request.method == "POST":
+        form = TeacherFreeTimeForm(data=request.POST, instance=free_time)
+        if form.is_valid():
+            form.save()
+            return render(request, 'base.html', {'message': "درخواست شما با موفقیت ثبت شد"})
+    else:
+        form = TeacherFreeTimeForm(instance=free_time)
+    return render(request, 'people/teacher_free_time_form.html', {"form": form, 'message': message})

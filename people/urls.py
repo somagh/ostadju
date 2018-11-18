@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 
 from people.views import signup, contact_us, profile, edit_profile, SearchProfiles, new_teacher_free_time, \
-    teacher_free_times, delete_teacher_free_time, search_teachers_api_view
+    teacher_free_times, delete_teacher_free_time, search_teachers_api_view, update_teacher_free_time
 
 urlpatterns = [
     url(r'^signup/$', signup, name="signup"),
@@ -15,5 +15,6 @@ urlpatterns = [
     url(r'^new_free_time$', new_teacher_free_time, name="new_free_time"),
     url(r'^delete_free_time/(?P<free_time_id>\d+)/$', delete_teacher_free_time, name="delete_free_time"),
     url(r'^teacher_free_times/(?P<teacher_username>.*)/$', teacher_free_times, name="teacher_free_times"),
-    url(r'^search_teachers_api/$', search_teachers_api_view, name="search_teachers_api")
+    url(r'^search_teachers_api/$', search_teachers_api_view, name="search_teachers_api"),
+    url(r'^update_teacher_free_time/(?P<free_time_id>.*)/$', update_teacher_free_time, name="update_teacher_free_time"),
 ]
