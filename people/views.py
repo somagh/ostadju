@@ -188,3 +188,16 @@ def undo_reserve_free_time(request, free_time_id):
         return render(request, 'home.html', {'message': message})
     q.delete()
     return render(request, 'home.html', {'message': 'فرصت مورد نظر با موفقیت لغو رزرو شد'})
+
+
+@login_required()
+def remove_user(request):
+    if request.method == "POST":
+        username = request.POST.get("username", "")
+        if request.user.username == username:
+            request.user.delete()
+            return render(request, 'home.html')
+        else:
+            return render(request, 'home.html', {'message': 'نام کاربری وارد شده صحیح نمی‌باشد'})
+    else:
+        return render(request, 'people/remove_user.html')

@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 
 from people.views import signup, contact_us, profile, edit_profile, SearchProfiles, new_teacher_free_time, \
     delete_teacher_free_time, search_teachers_api_view, update_teacher_free_time, seen_notification, reserve_free_time, \
-    undo_reserve_free_time
+    undo_reserve_free_time, remove_user
 
 app_name = "people"
 
@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^seen_notification/(?P<notification_id>\d+)/$', seen_notification, name="seen_notification"),
     url(r'^reserve_free_time/(?P<free_time_id>\d+)/$', reserve_free_time, name="reserve_free_time"),
     url(r'^undo_reserve_free_time/(?P<free_time_id>\d+)/$', undo_reserve_free_time, name="undo_reserve_free_time"),
+    url(r'^remove_user/$', remove_user, name="remove_user")
 ]
