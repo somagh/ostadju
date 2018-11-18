@@ -64,6 +64,10 @@ class TeacherFreeTimes(models.Model):
     start = models.TimeField(null=False, blank=False, verbose_name="ساعت شروع")
     end = models.TimeField(null=False, blank=False, verbose_name="ساعت پایان")
     student_capacity = models.PositiveIntegerField(null=False, blank=False, verbose_name="ظرفیت")
+    reserved = models.ManyToManyField(Student, blank=True, default=[], through="ReservedFreeTimes",)
+
+    def free_capacity(self):
+        return self.student_capacity - self.reserved.count()
 
     def __str__(self):
         return self.teacher.__str__() + " " + \
@@ -94,3 +98,11 @@ class TeacherFreeTimes(models.Model):
         for x in q:
             if not ((x.end < self.start) or (self.end < x.start)):
                 raise ValidationError(have_intersect_error)
+
+
+class ReservedFreeTimes(models.Model):
+    free_time = models.ForeignKey(TeacherFreeTimes, on_delete=models.CASCADE, null=False, blank=False)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = 'Reserved Free Times'
