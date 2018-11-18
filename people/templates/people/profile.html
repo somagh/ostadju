@@ -41,7 +41,7 @@
         <img id="profile_image" src="{{ user.picture.url }}"/>
     {% endif %}
     {% if user.is_teacher %}
-        <h2>فرصت های شما</h2>
+        <h2>فرصت ها</h2>
         <ul>
             {% for free_time in free_times %}
                 <li id="free-time-{{ forloop.counter0 }}">
@@ -72,6 +72,7 @@
             {% endfor %}
         </ul>
     {% elif request.user.is_student %}
+        <h2>فرصت ها رزرو شده</h2>
         <ul id="reserved-free-times">
             {% for free_time in free_times %}
                 <li id="reserved-free-time-{{ forloop.counter0 }}">
