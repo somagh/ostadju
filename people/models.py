@@ -81,6 +81,8 @@ class TeacherFreeTimes(models.Model):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
+        if self.student_capacity is not None and self.free_capacity() < 0:
+            raise ValidationError("ظرفیت جدید کمتر از تعداد رزروها است")
         if 'start' not in exclude:
             if 'end' not in exclude:
                 self.clean_end()
