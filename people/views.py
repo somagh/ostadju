@@ -99,8 +99,18 @@ def delete_teacher_free_time(request, free_time_id):
         if teacher_free_time.teacher != request.user.teacher:
             message = "فرصت مورد نظر متعلق به شما نیست"
         else:
+            for student in teacher_free_time.reserved.all():
+                teacher_user = teacher_free_time.teacher.user
+                text = "فرصتی که شما از استاد " \
+                       "{last_name} {first_name} " \
+                       "در تاریخ {self.date} از ساعت {self.start} تا ساعت" \
+                       " {self.end} گرفته بودید حذف گردید".format(self=teacher_free_time,
+                                                                  first_name=teacher_user.first_name,
+                                                                  last_name=teacher_user.last_name)
+                notification = Notification(user=student.user, text=text)
+                notification.save()
             teacher_free_time.delete()
-            message = 'فرصت مورد نظر حذف شد'
+            return redirect('home')
     except TeacherFreeTimes.DoesNotExist:
         message = 'فرصتی با شماره داده شده وجود ندارد'
     return render(request, 'base.html', {'message': message})

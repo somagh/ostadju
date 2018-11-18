@@ -23,12 +23,12 @@
     <p id="text_firstname">
         {{ user.first_name }}</p>
     <p>
-         نام خانوادگی:
+        نام خانوادگی:
     </p>
     <p id="text_lastname">
         {{ user.last_name }}</p>
     <p>
-         نام کاربری:
+        نام کاربری:
     </p>
     <p id="text_username">
         {{ user.username }}</p>
@@ -40,7 +40,7 @@
     {% if user.picture %}
         <img id="profile_image" src="{{ user.picture.url }}"/>
     {% endif %}
-    {% if request.user.is_teacher %}
+    {% if user.is_teacher %}
         <h2>فرصت های شما</h2>
         <ul>
             {% for free_time in free_times %}
@@ -50,6 +50,8 @@
                             <a id="update-teacher-free-time"
                                href="{% url 'people:update_teacher_free_time' free_time_id=free_time.id %}">
                                 {{ free_time.date|safe }}</a>
+                        {% else %}
+                            <a>{{ free_time.date|safe }}</a>
                         {% endif %}
                     </div>
                     <br>
