@@ -51,7 +51,8 @@
                                href="{% url 'people:update_teacher_free_time' free_time_id=free_time.id %}">
                                 {{ free_time.date|safe }}</a>
                         {% else %}
-                            <a>{{ free_time.date|safe }}</a>
+                            <a id="reserve-free-time"
+                               href="{% url 'people:reserve_free_time' free_time_id=free_time.id %}">{{ free_time.date|safe }}</a>
                         {% endif %}
                     </div>
                     <br>

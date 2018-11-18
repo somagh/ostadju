@@ -4,9 +4,9 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 
-from people.decorators import is_teacher_check
+from people.decorators import is_teacher_check, is_student_check
 from people.forms import SignUpForm, ContactUsForm, EditProfileUserForm, TeacherFreeTimeForm
-from people.models import User, Teacher, TeacherFreeTimes, Notification
+from people.models import User, Teacher, TeacherFreeTimes, Notification, ReservedFreeTimes
 
 
 def signup(request):
@@ -156,3 +156,18 @@ def seen_notification(request, notification_id):
             return redirect('home')
     except Notification.DoesNotExist:
         return render(request, 'home.html', {'message': 'اطلاعیه ای با شماره داده شده وجود ندارد'})
+
+
+@login_required()
+@user_passes_test(test_func=is_student_check)
+def reserve_free_time(request, free_time_id):
+    try:
+        teacher_free_time = TeacherFreeTimes.objects.get(id=free_time_id)
+    except TeacherFreeTimes.DoesNotExist:
+        return render(request, 'home.html', {'message': 'فرصتی با شماره داده شده وجود ندارد'})
+    if teacher_free_time.free_capacity() <= 0:
+        return render(request, 'home.html', {'message': 'فرصت مورد نظر ظرفیت خالی ندارد'})
+    x = ReservedFreeTimes(free_time=teacher_free_time,
+                          student=request.user.student)
+    x.save()
+    return render(request, 'home.html', {'message': 'فرصت مورد نظر با موفقیت رزرو شد'})
