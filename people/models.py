@@ -64,7 +64,7 @@ class TeacherFreeTimes(models.Model):
     start = models.TimeField(null=False, blank=False, verbose_name="ساعت شروع")
     end = models.TimeField(null=False, blank=False, verbose_name="ساعت پایان")
     student_capacity = models.PositiveIntegerField(null=False, blank=False, verbose_name="ظرفیت")
-    reserved = models.ManyToManyField(Student, blank=True, default=[], through="ReservedFreeTimes",)
+    reserved = models.ManyToManyField(Student, blank=True, default=[], through="ReservedFreeTimes")
 
     def free_capacity(self):
         return self.student_capacity - self.reserved.count()
@@ -81,7 +81,7 @@ class TeacherFreeTimes(models.Model):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if self.student_capacity is not None and self.free_capacity() < 0:
+        if self.id is not None and self.free_capacity() < 0:
             raise ValidationError("ظرفیت جدید کمتر از تعداد رزروها است")
         if 'start' not in exclude:
             if 'end' not in exclude:
@@ -108,3 +108,14 @@ class ReservedFreeTimes(models.Model):
 
     class Meta:
         verbose_name_plural = 'Reserved Free Times'
+
+    def __str__(self):
+        return self.student.__str__() + " " + self.free_time.__str__()
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False, related_name="notifications")
+    text = models.TextField(null=False, blank=True)
+
+    def __str__(self):
+        return self.user.__str__() + " " + self.text

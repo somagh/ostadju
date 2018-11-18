@@ -6,7 +6,7 @@ from django.views.generic import ListView
 
 from people.decorators import is_teacher_check
 from people.forms import SignUpForm, ContactUsForm, EditProfileUserForm, TeacherFreeTimeForm
-from people.models import User, Teacher, TeacherFreeTimes
+from people.models import User, Teacher, TeacherFreeTimes, Notification
 
 
 def signup(request):
@@ -99,8 +99,18 @@ def delete_teacher_free_time(request, free_time_id):
         if teacher_free_time.teacher != request.user.teacher:
             message = "فرصت مورد نظر متعلق به شما نیست"
         else:
+            for student in teacher_free_time.reserved.all():
+                teacher_user = teacher_free_time.teacher.user
+                text = "فرصتی که شما از استاد " \
+                       "{last_name} {first_name} " \
+                       "در تاریخ {self.date} از ساعت {self.start} تا ساعت" \
+                       " {self.end} گرفته بودید حذف گردید".format(self=teacher_free_time,
+                                                                  first_name=teacher_user.first_name,
+                                                                  last_name=teacher_user.last_name)
+                notification = Notification(user=student.user, text=text)
+                notification.save()
             teacher_free_time.delete()
-            message = 'فرصت مورد نظر حذف شد'
+            return redirect('home')
     except TeacherFreeTimes.DoesNotExist:
         message = 'فرصتی با شماره داده شده وجود ندارد'
     return render(request, 'base.html', {'message': message})
@@ -133,3 +143,16 @@ def update_teacher_free_time(request, free_time_id):
     else:
         form = TeacherFreeTimeForm(instance=free_time)
     return render(request, 'people/teacher_free_time_form.html', {"form": form, 'message': message})
+
+
+@login_required()
+def seen_notification(request, notification_id):
+    try:
+        notification = Notification.objects.get(id=notification_id)
+        if notification.user != request.user:
+            return render(request, 'home.html', {'message': 'اطلاعیه مورد نظر متعلق به شما نیست'})
+        else:
+            notification.delete()
+            return redirect('home')
+    except Notification.DoesNotExist:
+        return render(request, 'home.html', {'message': 'اطلاعیه ای با شماره داده شده وجود ندارد'})
