@@ -36,21 +36,21 @@ def contact_us(request):
 
 
 @login_required
-def profile(request, username=""):
-    if username:
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            return render(request, 'base.html', {'message': 'کاربری با این نام کاربری وجود ندارد'})
-    else:
-        user = request.user
-    return render(request, 'people/profile.html', {'user': user})
+def profile(request, username):
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return render(request, 'base.html', {'message': 'کاربری با این نام کاربری وجود ندارد'})
+    free_times = ""
+    if user.is_teacher:
+        free_times = TeacherFreeTimes.objects.filter(teacher=user.teacher)
+    return render(request, 'people/profile.html', {'user': user,
+                                                   'free_times': free_times})
 
 
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
-
         form = EditProfileUserForm(instance=request.user, data=request.POST, files=request.FILES)
 
         if form.is_valid():
@@ -91,13 +91,6 @@ def new_teacher_free_time(request):
     else:
         form = TeacherFreeTimeForm()
     return render(request, 'people/teacher_free_time_form.html', {"form": form})
-
-
-@login_required()
-@user_passes_test(test_func=is_teacher_check)
-def teacher_free_times(request, teacher_username):
-    free_times = TeacherFreeTimes.objects.filter(teacher__user__username=teacher_username)
-    return render(request, 'people/teacher_free_times.html', {'free_times': free_times})
 
 
 def delete_teacher_free_time(request, free_time_id):
