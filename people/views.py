@@ -83,11 +83,10 @@ class SearchProfiles(ListView):
 @user_passes_test(test_func=is_teacher_check)
 def new_teacher_free_time(request):
     if request.method == "POST":
-        form = TeacherFreeTimeForm(data=request.POST)
+        instance = TeacherFreeTimes(teacher=request.user.teacher)
+        form = TeacherFreeTimeForm(data=request.POST, instance=instance)
         if form.is_valid():
-            instance = form.save(False)
-            instance.teacher = request.user.teacher
-            instance.save()
+            form.save()
             return render(request, 'base.html', {'message': "درخواست شما با موفقیت ثبت شد"})
     else:
         form = TeacherFreeTimeForm()

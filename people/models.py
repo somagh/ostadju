@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from markdownx.models import MarkdownxField
@@ -70,3 +71,25 @@ class TeacherFreeTimes(models.Model):
 
     class Meta:
         verbose_name_plural = "Teacher Free Times"
+
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+        if 'start' not in exclude:
+            if 'end' not in exclude:
+                self.clean_end()
+                self.clean_start()
+
+    def clean_end(self):
+        if self.start.time() >= self.end:
+            raise ValidationError("زمان شروع باید قبل از زمان پایان فرصت باشد")
+
+    def clean_start(self):
+        have_intersect_error = "بازه زمانی انتخاب شده با فرصت های قبلی شما اشتراک دارد"
+        q = TeacherFreeTimes.objects.filter(teacher=self.teacher,
+                                            start__day=self.start.day,
+                                            start__month=self.start.month,
+                                            start__year=self.start.year)
+        for x in q:
+            if (x.start <= self.start and x.end >= self.start.time()) or \
+                    (x.start.time() <= self.end <= x.end):
+                raise ValidationError(have_intersect_error)
