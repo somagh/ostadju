@@ -17,11 +17,20 @@
             وارد شده اید
         </p>
     {% endif %}
-    <p id="text_firstname">نام:
+    <p>
+        نام:
+    </p>
+    <p id="text_firstname">
         {{ user.first_name }}</p>
-    <p id="text_lastname"> نام خانوادگی:
+    <p>
+         نام خانوادگی:
+    </p>
+    <p id="text_lastname">
         {{ user.last_name }}</p>
-    <p id="text_username"> نام کاربری:
+    <p>
+         نام کاربری:
+    </p>
+    <p id="text_username">
         {{ user.username }}</p>
     <p id="text_gender">جنسیت :
         {{ user.get_gender_display }}</p>
@@ -40,7 +49,7 @@
                         {% if request.user.is_teacher and request.user.teacher == free_time.teacher %}
                             <a id="update-teacher-free-time"
                                href="{% url 'people:update_teacher_free_time' free_time_id=free_time.id %}">
-                                {{  free_time.date|safe }}</a>
+                                {{ free_time.date|safe }}</a>
                         {% endif %}
                     </div>
                     <br>
