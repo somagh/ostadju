@@ -76,7 +76,7 @@
             {% for free_time in free_times %}
                 <li id="reserved-free-time-{{ forloop.counter0 }}">
                     <p id="teacher-full-name">
-                        {{ free_time.teacher.user.get_full_name }}
+                        <a href="{% url 'people:undo_reserve_free_time' free_time_id=free_time.id %}">{{ free_time.teacher.user.get_full_name }}</a>
                     </p>
                     <p id="date">
                         {{ free_time.date|safe }}

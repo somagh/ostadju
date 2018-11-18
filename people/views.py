@@ -176,3 +176,15 @@ def reserve_free_time(request, free_time_id):
                           student=request.user.student)
     x.save()
     return render(request, 'home.html', {'message': 'فرصت مورد نظر با موفقیت رزرو شد'})
+
+
+@login_required()
+@user_passes_test(test_func=is_student_check)
+def undo_reserve_free_time(request, free_time_id):
+    try:
+        q = ReservedFreeTimes.objects.filter(free_time_id=free_time_id, student=request.user.student)
+    except ReservedFreeTimes.DoesNotExist:
+        message = 'فرصتی با شماره داده شده وجود ندارد یا شما آن فرصت را رزرو نکرده اید'
+        return render(request, 'home.html', {'message': message})
+    q.delete()
+    return render(request, 'home.html', {'message': 'فرصت مورد نظر با موفقیت لغو رزرو شد'})
