@@ -4,6 +4,8 @@ from django.contrib.auth import views as auth_views
 from people.views import signup, contact_us, profile, edit_profile, SearchProfiles, new_teacher_free_time, \
     teacher_free_times, delete_teacher_free_time, search_teachers_api_view, update_teacher_free_time
 
+app_name = "people"
+
 urlpatterns = [
     url(r'^signup/$', signup, name="signup"),
     url(r'^login/$', auth_views.LoginView.as_view(template_name='people/login.html'), name='login'),
