@@ -5,9 +5,9 @@
 
     {% if request.user == user %}
         <a href="{% url 'people:edit_profile' %}" id="edit_profile">تغییر تنظیمات</a>
-        <p>
+        <p id="user-type">
             شما به عنوان
-            <b>
+            <b id="type">
                 {% if request.user.is_teacher %}
                     استاد
                 {% else %}

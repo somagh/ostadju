@@ -6,7 +6,11 @@
         {% for free_time in free_times %}
             <li id="free-time-{{ forloop.counter0 }}">
                 <div id="free-time-date">
-                    <a id="update-teacher-free-time" href="{% url 'people:update_teacher_free_time' free_time_id=free_time.id %}">{{ free_time.date }}</a>
+                    {% if request.user.is_teacher and request.user.teacher == free_time.teacher %}
+                        <a id="update-teacher-free-time"
+                           href="{% url 'people:update_teacher_free_time' free_time_id=free_time.id %}">
+                            {{ free_time.date }}</a>
+                    {% endif %}
                 </div>
                 <br>
                 <div id="free-time-start">
