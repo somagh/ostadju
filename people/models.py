@@ -59,7 +59,7 @@ class Teacher(models.Model):
 
 
 class TeacherFreeTimes(models.Model):
-    teacher = models.ForeignKey(Teacher, null=False, blank=False, verbose_name="استاد")
+    teacher = models.ForeignKey(Teacher, null=False, blank=False, verbose_name="استاد", on_delete=models.CASCADE)
     date = models.DateField(null=False, blank=False, verbose_name="تاریخ")
     start = models.TimeField(null=False, blank=False, verbose_name="ساعت شروع")
     end = models.TimeField(null=False, blank=False, verbose_name="ساعت پایان")
