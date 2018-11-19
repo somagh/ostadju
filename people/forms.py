@@ -1,10 +1,15 @@
 from django import forms
+from django.contrib.admin.widgets import AdminIntegerFieldWidget, AdminTimeWidget, AdminDateWidget
 from django.contrib.auth.forms import UserCreationForm
+from django.forms.widgets import SelectDateWidget
 
-from people.models import User
+from people.models import User, Student, Teacher, TeacherFreeTimes
 
 
 class SignUpForm(UserCreationForm):
+    type = forms.ChoiceField(choices=[('student', 'دانشجو'), ('teacher', 'استاد')], widget=forms.RadioSelect,
+                             required=True)
+
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
@@ -22,6 +27,7 @@ class SignUpForm(UserCreationForm):
         self.fields['first_name'].label = "نام"
         self.fields['last_name'].label = "نام خانوادگی"
         self.fields['email'].label = "ایمیل"
+        self.fields['type'].label = "نوع"
 
         self.error_messages['password_mismatch'] = "گذرواژه و تکرار گذرواژه یکسان نیستند."
 
@@ -34,10 +40,16 @@ class SignUpForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(False)
-        user.is_student = True  # TODO maybe he/she was a teacher
+        # user.is_student = True
+        user.is_student = self.cleaned_data['type'] == 'student'
+        user.is_teacher = self.cleaned_data['type'] == 'teacher'
         if commit:  # anyway we need to save this user
             user.save()
-        # user.student = Student.objects.create(user=user)
+        if user.is_student:
+            user.student = Student.objects.create(user=user)
+        if user.is_teacher:
+            user.teacher = Teacher.objects.create(user=user)
+
         return user
 
 
@@ -54,4 +66,31 @@ class EditProfileUserForm(forms.ModelForm):
         labels = {
             "first_name": "نام",
             "last_name": "نام خانوادگی"
+        }
+
+
+class TeacherFreeTimeForm(forms.ModelForm):
+    widget = forms.widgets.DateTimeInput(attrs={'type': 'date', 'class': 'datetimeshortcuts'})
+    start = forms.DateTimeField(widget=widget)
+    end = forms.DateTimeField(widget=widget)
+
+    class Meta:
+        model = TeacherFreeTimes
+        fields = ['date', 'start', 'end', 'student_capacity', ]
+        widgets = {
+            'date': AdminDateWidget(),
+            'start': AdminTimeWidget(),
+            'end': AdminTimeWidget(),
+            'student_capacity': AdminIntegerFieldWidget(),
+        }
+        error_messages = {
+            'end': {
+                'invalid': 'زمان پایان وارد شده معتبر نمی‌باشد'
+            },
+            'start': {
+                'invalid': 'زمان شروع وارد شده معتبر نمی‌باشد'
+            },
+            'date': {
+                'invalid': 'تاریخ وارد شده معتبر نمی‌باشد'
+            },
         }

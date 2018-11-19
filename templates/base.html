@@ -3,28 +3,38 @@
 <title>استادجو</title>
 
 <head>
-    <link rel="stylesheet" type="text/css"  href="{% static 'markdownx/admin/css/markdownx.css' %}">
-    <link rel="stylesheet" type="text/css"  href="{% static 'markdownx/js/markdownx.js' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'markdownx/admin/css/markdownx.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'markdownx/js/markdownx.js' %}">
 </head>
 <body>
-    <nav id="navbar">
-        <a id="navbar_home" href="{% url 'home' %}">خانه</a>
-        {% if request.user.is_authenticated %}
+<nav id="navbar">
+    <a id="navbar_home" href="{% url 'home' %}">خانه</a>
+    {% if request.user.is_authenticated %}
         <a id="navbar_logout" href="{% url 'people:logout' %}">خروج</a>
-        <a id="navbar_profile" href="{% url 'people:profile' %}">پروفایل</a>
-        {% else %}
+        <a id="navbar_profile" href="{{ request.user.profile_url }}">پروفایل</a>
+        {% if request.user.is_teacher %}
+            <a id="navbar_new_free_time" href="{% url 'people:new_free_time' %}">اضافه کردن فرصت</a>
+        {% endif %}
+    {% else %}
         <a id="navbar_login" href="{% url 'people:login' %}">ورود</a>
         <a id="navbar_signup" href="{% url 'people:signup' %}">ثبت نام</a>
-        {% endif %}
-        <a id="navbar_contact_us" href="{% url 'people:contact_us' %}">تماس با ما</a>
-    </nav>
-    <br>
-    {% if message %}
-        <strong>{{ message }}</strong>
-        <br>
     {% endif %}
-    {% block content %}
-    {% endblock %}
+    <a id="navbar_contact_us" href="{% url 'people:contact_us' %}">تماس با ما</a>
+</nav>
+<br>
+<div id="search_profiles">
+    <form id="search_profiles" action="{% url 'people:search_profiles' %}" method="get">
+        <input id="search_profiles" type="text" placeholder="جستجو..." name="search" required>
+        <button id="search_profiles" type="submit">برو</button>
+    </form>
+</div>
+{% if message %}
+    <strong id="message">{{ message }}</strong>
+    <br>
+    <br>
+{% endif %}
+{% block content %}
+{% endblock %}
 </body>
 
 </html>

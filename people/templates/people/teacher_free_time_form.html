@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h2>ساخت فرصت جدید</h2>
+    {% if form.instance.id %}
+        <a id="remove-free-time" href="{% url 'people:delete_free_time' free_time_id=form.instance.id %}">حذف کردن فرصت</a>
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" id="form_submit">ارسال</button>
+    </form>
+    {{ form.media }}
+
+{% endblock content %}
