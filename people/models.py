@@ -1,4 +1,3 @@
-import datetime
 import uuid
 
 from django.contrib.auth.models import AbstractUser
@@ -6,7 +5,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.urls import reverse
-from django.utils import timezone
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
 
