@@ -5,9 +5,10 @@
 
     {% if request.user == user %}
         <a href="{% url 'people:edit_profile' %}" id="edit_profile">تغییر تنظیمات</a>
-        <p>
+        <a id="remove-user" href="{% url 'people:remove_user' %}">حذف کاربر و خروج از سامانه</a>
+        <p id="user-type">
             شما به عنوان
-            <b>
+            <b id="type">
                 {% if request.user.is_teacher %}
                     استاد
                 {% else %}
@@ -17,11 +18,20 @@
             وارد شده اید
         </p>
     {% endif %}
-    <p id="text_firstname">نام:
+    <p>
+        نام:
+    </p>
+    <p id="text_firstname">
         {{ user.first_name }}</p>
-    <p id="text_lastname"> نام خانوادگی:
+    <p>
+        نام خانوادگی:
+    </p>
+    <p id="text_lastname">
         {{ user.last_name }}</p>
-    <p id="text_username"> نام کاربری:
+    <p>
+        نام کاربری:
+    </p>
+    <p id="text_username">
         {{ user.username }}</p>
     <p id="text_gender">جنسیت :
         {{ user.get_gender_display }}</p>
@@ -30,5 +40,58 @@
         {{ user.get_bio|safe }}</p>
     {% if user.picture %}
         <img id="profile_image" src="{{ user.picture.url }}"/>
+    {% endif %}
+    {% if user.is_teacher %}
+        <h2>فرصت ها</h2>
+        <ul>
+            {% for free_time in free_times %}
+                <li id="free-time-{{ forloop.counter0 }}">
+                    <div id="free-time-date">
+                        {% if request.user.is_teacher and request.user.teacher == free_time.teacher %}
+                            <a id="update-teacher-free-time"
+                               href="{% url 'people:update_teacher_free_time' free_time_id=free_time.id %}">
+                                {{ free_time.date|safe }}</a>
+                        {% else %}
+                            <a id="reserve-free-time"
+                               href="{% url 'people:reserve_free_time' free_time_id=free_time.id %}">{{ free_time.date|safe }}</a>
+                        {% endif %}
+                    </div>
+                    <br>
+                    <div id="free-time-start">
+                        {{ free_time.start|safe }}
+                    </div>
+                    <br>
+                    <div id="free-time-end">
+                        {{ free_time.end|safe }}
+                    </div>
+                    <br>
+                    <div id="free-time-student_capacity">
+                        {{ free_time.student_capacity }}
+                    </div>
+                </li>
+                <br>
+            {% endfor %}
+        </ul>
+    {% elif request.user.is_student %}
+        <h2>فرصت ها رزرو شده</h2>
+        <ul id="reserved-free-times">
+            {% for free_time in free_times %}
+                <li id="reserved-free-time-{{ forloop.counter0 }}">
+                    <p id="teacher-full-name">
+                        <a id="undo-reserver-free-time" href="{% url 'people:undo_reserve_free_time' free_time_id=free_time.id %}">
+                            {{ free_time.teacher.user.get_full_name }}</a>
+                    </p>
+                    <p id="date">
+                        {{ free_time.date|safe }}
+                    </p>
+                    <p id="start">
+                        {{ free_time.start|safe }}
+                    </p>
+                    <p id="end">
+                        {{ free_time.end|safe }}
+                    </p>
+                </li>
+            {% endfor %}
+        </ul>
     {% endif %}
 {% endblock content %}
