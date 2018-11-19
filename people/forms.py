@@ -89,3 +89,21 @@ class TeacherFreeTimeForm(forms.ModelForm):
                 'invalid': 'تاریخ وارد شده معتبر نمی‌باشد'
             },
         }
+
+
+class ForgetPasswordForm(forms.Form):
+    email = forms.EmailField(required=True, label="ایمیل", error_messages={'invalid': 'ایمیل وارد شده صحیح نمی‌باشد'})
+
+
+class ResetPasswordForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ['password1', 'password2']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password1'].label = "گذرواژه"
+        self.fields['password2'].label = "تکرار گذرواژه"
+        self.fields['password1'].help_text = ""
+        self.fields['password2'].help_text = ""
+        self.error_messages['password_mismatch'] = "گذرواژه و تکرار گذرواژه یکسان نیستند."
