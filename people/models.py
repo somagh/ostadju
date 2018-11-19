@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -19,6 +21,7 @@ class User(AbstractUser):
     bio = MarkdownxField(max_length=500, blank=True, verbose_name="زندگی نامه", default="")
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, verbose_name="جنسیت", blank=True)
     picture = models.ImageField(null=True, upload_to=get_picture_filename, verbose_name="عکس پروفایل", blank=True)
+    activation_code = models.UUIDField(null=False, default=uuid.uuid1)
 
     @property
     def get_bio(self):
