@@ -23,10 +23,11 @@
 </nav>
 <br>
 <div id="search_profiles">
-    <form id="search_profiles" action="{% url 'people:search_profiles' %}" method="get">
-        <input id="search_profiles" type="text" placeholder="جستجو..." name="search" required>
-        <button id="search_profiles" type="submit">برو</button>
+    <form id="search_profiles_form" action="{% url 'people:search_profiles' %}" method="get">
+        <input id="search_profiles_input" type="text" placeholder="جستجو..." name="search" required onchange="">
+        <button id="search_profiles_button" type="submit">برو</button>
     </form>
+    <div id="search_autocompletes"></div>
 </div>
 {% if message %}
     <strong id="message">{{ message }}</strong>
@@ -36,5 +37,5 @@
 {% block content %}
 {% endblock %}
 </body>
-
+<script src="{% static 'autocomplete.js' %}"></script>
 </html>
