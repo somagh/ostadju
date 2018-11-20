@@ -223,7 +223,5 @@ pip-selfcheck.json
 .idea/
 .vscode/
 
-static/
-
 **/migrations/**
 !**/migrations/__init__.py
