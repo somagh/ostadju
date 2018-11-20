@@ -6,6 +6,8 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import ListView
+from django.contrib.auth import logout
+
 
 from ostadju import settings
 from people.decorators import is_teacher_check, is_student_check
@@ -196,16 +198,9 @@ def undo_reserve_free_time(request, free_time_id):
 
 @login_required()
 def remove_user(request):
-    if request.method == "POST":
-        username = request.POST.get("username", "")
-        if request.user.username == username:
-            request.user.delete()
-            return render(request, 'home.html')
-        else:
-            return render(request, 'home.html', {'message': 'نام کاربری وارد شده صحیح نمی‌باشد'})
-    else:
-        return render(request, 'people/remove_user.html')
-
+    request.user.delete()
+    logout(request)
+    return render(request, 'home.html')
 
 def forget_password(request):
     if request.method == "POST":
