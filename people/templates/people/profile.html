@@ -5,7 +5,7 @@
 
     {% if request.user == user %}
         <a href="{% url 'people:edit_profile' %}" id="edit_profile">تغییر تنظیمات</a>
-        <a id="remove-user" href="{% url 'people:remove_user' %}">حذف کاربر و خروج از سامانه</a>
+        <a id="remove_user" href="{% url 'people:remove_user' %}">حذف کاربر و خروج از سامانه</a>
         <p id="user-type">
             شما به عنوان
             <b id="type">
