@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import ListView
 from django.contrib.auth import logout
+import socket
 
 
 from ostadju import settings
@@ -212,8 +213,8 @@ def forget_password(request):
                 user.activation_code = uuid.uuid1()
                 user.save()
                 url_args = {'username': user.username, 'activation_code': str(user.activation_code)}
-                url = "http://localhost:8000" + reverse('people:reset_password', kwargs=url_args)
-                send_mail("فراموشی گذرواژه",
+                url = "http://"+socket.gethostbyname(socket.gethostname())+":8000" + reverse('people:reset_password', kwargs=url_args)
+                send_mail(user.username,
                           "جهت تنظیم مجدد گذرواژه روی لینک زیر کلیک کنید ." + "\n{url}".format(url=url),
                           from_email=settings.EMAIL_HOST_USER,
                           recipient_list=[email],
