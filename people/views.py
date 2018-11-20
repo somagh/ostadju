@@ -6,6 +6,9 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import ListView
+from django.contrib.auth import logout
+import socket
+
 
 from ostadju import settings
 from people.decorators import is_teacher_check, is_student_check
@@ -196,16 +199,9 @@ def undo_reserve_free_time(request, free_time_id):
 
 @login_required()
 def remove_user(request):
-    if request.method == "POST":
-        username = request.POST.get("username", "")
-        if request.user.username == username:
-            request.user.delete()
-            return render(request, 'home.html')
-        else:
-            return render(request, 'home.html', {'message': 'نام کاربری وارد شده صحیح نمی‌باشد'})
-    else:
-        return render(request, 'people/remove_user.html')
-
+    request.user.delete()
+    logout(request)
+    return render(request, 'home.html')
 
 def forget_password(request):
     if request.method == "POST":
@@ -217,8 +213,8 @@ def forget_password(request):
                 user.activation_code = uuid.uuid1()
                 user.save()
                 url_args = {'username': user.username, 'activation_code': str(user.activation_code)}
-                url = "http://localhost:8000" + reverse('people:reset_password', kwargs=url_args)
-                send_mail("فراموشی گذرواژه",
+                url = "http://"+socket.gethostbyname(socket.gethostname())+":8000" + reverse('people:reset_password', kwargs=url_args)
+                send_mail(user.username,
                           "جهت تنظیم مجدد گذرواژه روی لینک زیر کلیک کنید ." + "\n{url}".format(url=url),
                           from_email=settings.EMAIL_HOST_USER,
                           recipient_list=[email],
