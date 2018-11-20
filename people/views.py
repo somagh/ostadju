@@ -40,8 +40,6 @@ def contact_us(request):
         form = ContactUsForm()
     return render(request, 'people/contact_us.html', {'form': form})
 
-
-@login_required
 def profile(request, username):
     try:
         user = User.objects.get(username=username)

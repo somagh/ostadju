@@ -5,6 +5,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'markdownx/admin/css/markdownx.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'markdownx/js/markdownx.js' %}">
+    <script type="text/javascript" src="{% static 'autocomplete.js' %}" async></script>
 </head>
 <body>
 <nav id="navbar">
@@ -24,10 +25,10 @@
 <br>
 <div id="search_profiles">
     <form id="search_profiles_form" action="{% url 'people:search_profiles' %}" method="get">
-        <input id="search_profiles_input" type="text" placeholder="جستجو..." name="search" required onchange="">
+        <input id="search_profiles_input" type="text" placeholder="جستجو..." name="search" required/>
         <button id="search_profiles_button" type="submit">برو</button>
     </form>
-    <div id="search_autocompletes"></div>
+    <div id="autocomplete_results"></div>
 </div>
 {% if message %}
     <strong id="message">{{ message }}</strong>
@@ -37,5 +38,4 @@
 {% block content %}
 {% endblock %}
 </body>
-<script src="{% static 'autocomplete.js' %}"></script>
 </html>
