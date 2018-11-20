@@ -70,9 +70,9 @@ class EditProfileUserForm(forms.ModelForm):
 
 
 class TeacherFreeTimeForm(forms.ModelForm):
-    widget = forms.widgets.DateTimeInput(attrs={'type': 'date', 'class': 'datetimeshortcuts'})
-    start = forms.DateTimeField(widget=widget)
-    end = forms.DateTimeField(widget=widget)
+    # widget = forms.widgets.DateTimeInput(attrs={'type': 'date', 'class': 'datetimeshortcuts'})
+    # start = forms.DateTimeField(widget=widget)
+    # end = forms.DateTimeField(widget=widget)
 
     class Meta:
         model = TeacherFreeTimes
