@@ -1,11 +1,16 @@
+import uuid
+
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.generic import ListView
 
+from ostadju import settings
 from people.decorators import is_teacher_check, is_student_check
-from people.forms import SignUpForm, ContactUsForm, EditProfileUserForm, TeacherFreeTimeForm
+from people.forms import SignUpForm, ContactUsForm, EditProfileUserForm, TeacherFreeTimeForm, ForgetPasswordForm, \
+    ResetPasswordForm
 from people.models import User, Teacher, TeacherFreeTimes, Notification, ReservedFreeTimes
 
 
@@ -29,7 +34,8 @@ def contact_us(request):
                           form.cleaned_data['email'], form.cleaned_data['text']), from_email=form.cleaned_data['email'],
                       recipient_list=["ostadju@fastmail.com"],
                       fail_silently=True)
-            return render(request, 'people/contact_us_success.html')
+            return render(request, 'base.html', {'message': 'درخواست شما ثبت شد.'})
+
     else:
         form = ContactUsForm()
     return render(request, 'people/contact_us.html', {'form': form})
@@ -201,3 +207,45 @@ def remove_user(request):
             return render(request, 'home.html', {'message': 'نام کاربری وارد شده صحیح نمی‌باشد'})
     else:
         return render(request, 'people/remove_user.html')
+
+
+def forget_password(request):
+    if request.method == "POST":
+        form = ForgetPasswordForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            try:
+                user = User.objects.get(email=email)
+                user.activation_code = uuid.uuid1()
+                user.save()
+                url_args = {'username': user.username, 'activation_code': str(user.activation_code)}
+                url = "http://localhost:8000" + reverse('people:reset_password', kwargs=url_args)
+                send_mail("فراموشی گذرواژه",
+                          "جهت تنظیم مجدد گذرواژه روی لینک زیر کلیک کنید ." + "\n{url}".format(url=url),
+                          from_email=settings.EMAIL_HOST_USER,
+                          recipient_list=[email],
+                          fail_silently=True)
+                message = "ایمیل تغییر گذرواژه برای شما فرستاده شد"
+            except User.DoesNotExist:
+                message = 'کاربری با ایمیل داده شده وجود ندارد.'
+            return render(request, 'home.html', {'message': message})
+
+    else:
+        form = ForgetPasswordForm()
+    return render(request, 'people/forget_password.html', {'form': form})
+
+
+def reset_password(request, username, activation_code):
+    try:
+        user = User.objects.get(username=username, activation_code=activation_code)
+        if request.method == "POST":
+            form = ResetPasswordForm(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+                user.activation_code = uuid.uuid1()
+                return render(request, 'home.html', {'message': 'درخواست شما با موفقیت انجام شد'})
+        else:
+            form = ResetPasswordForm()
+        return render(request, 'people/reset_password.html', {'form': form})
+    except User.DoesNotExist:
+        return render(request, 'home.html', {'message': 'اطلاعات داده شده معتبر نیست'})

@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>ورود</h2>
-<form method="post">
-    {% csrf_token %}
-    {% if form.errors %}
-نام کاربری یا گذرواژه غلط است.
-    {% endif %}
-    <div>{{form.username}} :نام کاربری</div>
-    <div>{{form.password}} :گذرواژه</div>
-    <button type="submit" id="login_submit">ورود</button>
-</form>
+    <h2>ورود</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% if form.errors %}
+            نام کاربری یا گذرواژه غلط است.
+        {% endif %}
+        <div>{{ form.username }} :نام کاربری</div>
+        <div>{{ form.password }} :گذرواژه</div>
+        <button type="submit" id="login_submit">ورود</button>
+    </form>
+    <a id="forget-password" href="{% url 'people:forget_password' %}">فراموشی گذرواژه</a>
 {% endblock content %}
