@@ -3,7 +3,7 @@
     <ul>
         {% if teachers %}
             {% for teacher in teachers %}
-                <li id="id_teacher">
+                <li id="id_teacher_{{ forloop.counter0 }}">
                     <p>
                         نام کاربری :‌
                     </p>

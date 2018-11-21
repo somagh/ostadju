@@ -1,4 +1,4 @@
-document.getElementById('search_profiles_form').addEventListener('input', function (e) {
+document.getElementById('id_search_profiles_form').addEventListener('input', function (e) {
     results = document.getElementById('autocomplete_results');
     fetch("http://localhost:8000/search_teachers_api?query=" + e.target.value).then(function (response) {
         return response.json()
