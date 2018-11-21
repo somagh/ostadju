@@ -80,7 +80,7 @@ class TeacherFreeTimes(models.Model):
                self.student_capacity.__str__()
 
     class Meta:
-        verbose_name_plural = "Teacher Free Times"
+        verbose_name_plural = "Meetings"
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
@@ -110,7 +110,7 @@ class ReservedFreeTimes(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=False, blank=False)
 
     class Meta:
-        verbose_name_plural = 'Reserved Free Times'
+        verbose_name_plural = 'Reserved Meetings'
 
     def __str__(self):
         return self.student.__str__() + " " + self.free_time.__str__()

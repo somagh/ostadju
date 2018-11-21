@@ -4,11 +4,11 @@
     <h2>پروفایل</h2>
 
     {% if request.user == user %}
-        <a href="{% url 'people:edit_profile' %}" id="edit_profile">تغییر تنظیمات</a>
-        <a id="remove_user" href="{% url 'people:remove_user' %}">حذف کاربر و خروج از سامانه</a>
-        <a id="remove-user" onClick="confirm('Are you sure?');" href="{% url 'people:remove_user' %}">حذف کاربر و خروج از سامانه</a>
+        <a href="{% url 'people:edit_profile' %}" id="id_edit_profile">تغییر تنظیمات</a>
+        <!-- <a id="id_remove_user" href="{% url 'people:remove_user' %}">حذف کاربر و خروج از سامانه</a> !-->
+        <a id="id_remove_user" onClick="confirm("آیا مطمئن هستید");" href="{% url 'people:remove_user' %}">حذف کاربر و خروج از سامانه</a>
         <p id="user-type">
-            شما به عنوان
+            شما به عنوا
             <b id="type">
                 {% if request.user.is_teacher %}
                     استاد
@@ -22,51 +22,51 @@
     <p>
         نام:
     </p>
-    <p id="text_firstname">
+    <p id="id_firstname">
         {{ user.first_name }}</p>
     <p>
         نام خانوادگی:
     </p>
-    <p id="text_lastname">
+    <p id="id_lastname">
         {{ user.last_name }}</p>
     <p>
         نام کاربری:
     </p>
-    <p id="text_username">
+    <p id="id_username">
         {{ user.username }}</p>
-    <p id="text_gender">جنسیت :
+    <p id="id_gender">جنسیت :
         {{ user.get_gender_display }}</p>
-    <p id="text_bio">زندگی نامه:
+    <p id="id_bio">زندگی نامه:
         <br>
         {{ user.get_bio|safe }}</p>
     {% if user.picture %}
-        <img id="profile_image" src="{{ user.picture.url }}"/>
+        <img id="id_profile_image" src="{{ user.picture.url }}"/>
     {% endif %}
     {% if user.is_teacher %}
         <h2>فرصت ها</h2>
         <ul>
             {% for free_time in free_times %}
-                <li id="free-time-{{ forloop.counter0 }}">
-                    <div id="free-time-date">
+                <li id="id_meeting">
+                    <div id="id_meeting_date">
                         {% if request.user.is_teacher and request.user.teacher == free_time.teacher %}
-                            <a id="update-teacher-free-time"
+                            <a id="id_edit_meeting"
                                href="{% url 'people:update_teacher_free_time' free_time_id=free_time.id %}">
                                 {{ free_time.date|safe }}</a>
                         {% else %}
-                            <a id="reserve-free-time"
+                            <a id="id_reserve_meeting"
                                href="{% url 'people:reserve_free_time' free_time_id=free_time.id %}">{{ free_time.date|safe }}</a>
                         {% endif %}
                     </div>
                     <br>
-                    <div id="free-time-start">
+                    <div id="id_meeting_start_time">
                         {{ free_time.start|safe }}
                     </div>
                     <br>
-                    <div id="free-time-end">
+                    <div id="id_meeting_end_time">
                         {{ free_time.end|safe }}
                     </div>
                     <br>
-                    <div id="free-time-student_capacity">
+                    <div id="id_meeting_student_capacity">
                         {{ free_time.student_capacity }}
                     </div>
                 </li>
@@ -75,21 +75,21 @@
         </ul>
     {% elif request.user.is_student %}
         <h2>فرصت ها رزرو شده</h2>
-        <ul id="reserved-free-times">
+        <ul>
             {% for free_time in free_times %}
-                <li id="reserved-free-time-{{ forloop.counter0 }}">
-                    <p id="teacher-full-name">
-                        <a id="undo-reserver-free-time" href="{% url 'people:undo_reserve_free_time' free_time_id=free_time.id %}">
+                <li id="id_reserved_meeting">
+                    <p>
+                        <a id="id_cancel_meeting" href="{% url 'people:undo_reserve_free_time' free_time_id=free_time.id %}">
                             {{ free_time.teacher.user.get_full_name }}</a>
                     </p>
-                    <p id="date">
+                    <p id="id_meeting_date">
                         {{ free_time.date|safe }}
                     </p>
-                    <p id="start">
+                    <p id="id_meeting_start_time">
                         {{ free_time.start|safe }}
-                    </p>?
+                    </p>
 
-                    <p id="end">
+                    <p id="id_meeting_end_time">
                         {{ free_time.end|safe }}
                     </p>
                 </li>

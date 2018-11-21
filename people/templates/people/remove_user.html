@@ -4,8 +4,8 @@
     <p>برای حذف کاربر نام کاربری خود را وارد کنید</p>
     <form method="post">
         {% csrf_token %}
-        <label for="id_username">نام کاربری: </label>
+        <label for="username">نام کاربری: </label>
         <input id="id_username" type="text" name="username" required="">
-        <button id="remove_user" type="submit">حذف</button>
+        <button id="id_submit" type="submit">حذف</button>
     </form>
 {% endblock content %}
