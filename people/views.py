@@ -8,8 +8,8 @@ from django.urls import reverse
 from django.views.generic import ListView
 from django.contrib.auth import logout
 import socket
-
-
+import netifaces
+import re
 from ostadju import settings
 from people.decorators import is_teacher_check, is_student_check
 from people.forms import SignUpForm, ContactUsForm, EditProfileUserForm, TeacherFreeTimeForm, ForgetPasswordForm, \
@@ -22,6 +22,7 @@ def signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
+            print(form.__dict__)
             return redirect('home')
     else:
         form = SignUpForm()
@@ -210,10 +211,19 @@ def forget_password(request):
             email = form.cleaned_data['email']
             try:
                 user = User.objects.get(email=email)
+                print("USER {}".format(user.__dict__))
                 user.activation_code = uuid.uuid1()
                 user.save()
                 url_args = {'username': user.username, 'activation_code': str(user.activation_code)}
-                url = "http://"+socket.gethostbyname(socket.gethostname())+":8000" + reverse('people:reset_password', kwargs=url_args)
+                ips = [netifaces.ifaddresses(iface)[netifaces.AF_INET][0]['addr'] for iface in netifaces.interfaces() if netifaces.AF_INET in netifaces.ifaddresses(iface)]
+                ip = ""
+                for i in ips:
+                    if re.compile("192*").match(i):
+                        ip = i
+                        break
+                if ip is None:
+                    ip = "192.168.koft.koft not found [line 224 views.py forget_password]"
+                url = "http://"+ip+":8000" + reverse('people:reset_password', kwargs=url_args)
                 send_mail(user.username,
                           "جهت تنظیم مجدد گذرواژه روی لینک زیر کلیک کنید ." + "\n{url}".format(url=url),
                           from_email=settings.EMAIL_HOST_USER,
